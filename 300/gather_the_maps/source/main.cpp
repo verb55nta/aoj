@@ -9,6 +9,7 @@ int main(void){
   int **schedule;
   int **tmp_schedule;  
   int answer=-1;
+  int test_case=1;
 
   for(cin>>n;n!=0;cin>>n){
     int day_max=0;
@@ -22,8 +23,8 @@ int main(void){
       schedule[i] = new int[30+1];
       tmp_schedule[i] = new int[30+1];      
 
-      for(int j=0;j<30;j++){
-	schedule[i][j+1]=0;
+      for(int j=0;j<30+1;j++){
+	schedule[i][j]=0;
       }
       
       for(int j=0;j<k;j++){
@@ -56,6 +57,8 @@ int main(void){
     for(int i=day_max;i>=1 ;i--){
 
       //cout << "day " << i << " challenge:" << endl;
+      int root=101;
+
       
       for(int j=0;j<n;j++){
 
@@ -94,7 +97,17 @@ int main(void){
 
 	if(pair.size() > 1){
 	  //cout << "pair exists !" << endl;
-	  //cout << "pair[0]:"<< pair[0] << endl;	  
+	  //cout << "pair[0]:"<< pair[0] << endl;
+	  int dup=0;
+	  for(int x:pair){
+	    dup += tmp_schedule[x][0];
+	  }
+	  //cout << "root:" << root << endl;	  
+	  //cout << "dup:" << dup << endl;
+	  
+	  if(dup == 0 && root!=101) continue;
+	  else root=pair[0];
+	  
 	  for(int k=1;k<day_max+1;k++){
 	    for(int x:pair){
 	      //tmp_schedule[pair[0]][k] |= tmp_schedule[x][k];
@@ -103,27 +116,32 @@ int main(void){
 	      }
 	    }
 	  }
-	  int dup=0;
 
-	  for(int x:pair){
-	      if(x != pair[0]){
-		tmp_schedule[x][0]=1;
-	      }
-	      else{
-		tmp_schedule[x][0]=2;		
-	      }
-	  }
-	  int two_cnt=0;
-	  for(int k=0;k<n;k++){
+	  /*
+	    int two_cnt=0;
+	    for(int k=0;k<n;k++){
 	    if(tmp_schedule[k][0] == 2){
-	      two_cnt++;
+	    two_cnt++;
+	    }
+	    }
+	    if(two_cnt > 1){
+	    //cout << "root dupulicate!" << endl;
+	    
+	    continue;
+	    //break;	    
+	    }
+	  */	  
+	  
+	  for(int x:pair){
+	    if(x != pair[0]){
+	      tmp_schedule[x][0]=1;
+	    }
+	    else{
+	      tmp_schedule[x][0]=2;
+		
 	    }
 	  }
-	  if(two_cnt > 1){
-	    //cout << "root dupulicate!" << endl;
-	    //continue;
-	    break;	    
-	  }
+
 	}
 
 	for(int cnt1=0;cnt1<n;cnt1++){
@@ -138,17 +156,38 @@ int main(void){
 	
       }
       //answer=i;
+      //cout << "root:" << root << endl;	        
       int judge;
       for(judge=1;judge<n;judge++){
 	if(tmp_schedule[judge][0] !=1) break;
       }
 
-      if(judge == n) answer=i;
-      
+      if(judge == n){
+	//cout << "candidate:" << i << endl;
+	answer=i;
+      }   
     }    
 
     //cout << "answer:" << answer << endl;
-    cout << answer << endl;        
+    cout << answer << endl;
+    //cout << "test_case:" << test_case << "-" << answer << endl;
+
+    //if(test_case == 269 or test_case == 406 or test_case == 564){
+    if(0){    
+      for(int i=0;i<n;i++){
+	cout << i << ":";
+	cout << schedule[i][0];
+	cout << "|" ;
+	for(int j=1;j<day_max+1;j++){
+	  cout << schedule[i][j] << " ";
+	}      
+	cout << endl;
+
+      }
+      cout << endl;      
+    }
+    
+    test_case++;
     //cout << "day_max:" << day_max << endl;
     
   }
